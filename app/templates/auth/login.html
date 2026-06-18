@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+<section class="form-page">
+    <h1>Вход</h1>
+    <form class="form" method="post">
+        <label>
+            <span>Логин</span>
+            <input name="login" required autofocus>
+        </label>
+        <label>
+            <span>Пароль</span>
+            <input name="password" type="password" required>
+        </label>
+        <label class="checkbox">
+            <input name="remember" type="checkbox" value="1">
+            <span>Запомнить меня</span>
+        </label>
+        <button class="button" type="submit">Войти</button>
+    </form>
+    <div class="login-help">
+        <strong>Данные для входа:</strong>
+        <span>admin / admin123 — администратор</span>
+        <span>moderator / moder123 — модератор</span>
+        <span>reader / user123 — пользователь</span>
+    </div>
+</section>
+{% endblock %}

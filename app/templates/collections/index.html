@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Мои подборки{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <h1>Мои подборки</h1>
+</div>
+
+{% if collections %}
+    <div class="table-wrap">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Количество книг</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for collection in collections %}
+                    <tr>
+                        <td>{{ collection.title }}</td>
+                        <td>{{ collection.books|length }}</td>
+                        <td class="table-actions">
+                            <a class="button small" href="{{ url_for('collections.show', collection_id=collection.id) }}">Просмотр</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <p class="empty">У вас пока нет подборок.</p>
+{% endif %}
+
+<div class="form-actions bottom-actions">
+    <button class="button" type="button" data-open-dialog="new-collection-dialog">Добавить подборку</button>
+</div>
+
+<dialog id="new-collection-dialog">
+    <form method="post" action="{{ url_for('collections.create') }}">
+        <h2>Новая подборка</h2>
+        <label>
+            <span>Название</span>
+            <input name="title" required>
+        </label>
+        <div class="dialog-actions">
+            <button class="button" type="submit">Добавить</button>
+            <button class="button secondary" type="button" data-close-dialog>Отмена</button>
+        </div>
+    </form>
+</dialog>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Рецензия{% endblock %}
+
+{% block content %}
+<section class="form-page wide">
+    <h1>Рецензия на «{{ book.title }}»</h1>
+    <form class="form" method="post">
+        <label>
+            <span>Оценка</span>
+            <select name="rating" required>
+                <option value="5">отлично</option>
+                <option value="4">хорошо</option>
+                <option value="3">удовлетворительно</option>
+                <option value="2">неудовлетворительно</option>
+                <option value="1">плохо</option>
+                <option value="0">ужасно</option>
+            </select>
+        </label>
+        <label>
+            <span>Текст рецензии</span>
+            <textarea id="review-text" name="text" placeholder="Можно использовать Markdown">{{ request.form.get('text', '') }}</textarea>
+        </label>
+        <div class="form-actions">
+            <button class="button" type="submit">Сохранить</button>
+            <a class="button secondary" href="{{ url_for('books.show', book_id=book.id) }}">Отмена</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

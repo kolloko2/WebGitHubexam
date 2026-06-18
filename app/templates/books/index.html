@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Книги{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <h1>Книги</h1>
+    {% if can_create_book() %}
+        <a class="button" href="{{ url_for('books.create') }}">Добавить книгу</a>
+    {% endif %}
+</div>
+
+<div class="book-list">
+    {% for book in books.items %}
+        <article class="book-row">
+            <img class="cover-thumb" src="{{ url_for('books.cover_file', filename=book.cover.filename) }}" alt="Обложка {{ book.title }}">
+            <div class="book-info">
+                <h2>{{ book.title }}</h2>
+                <p class="muted">{{ book.author }}, {{ book.year }} · {{ book.publisher }}</p>
+                <p>
+                    {% for genre in book.genres %}
+                        <span class="tag">{{ genre.name }}</span>
+                    {% endfor %}
+                </p>
+                <p class="muted">
+                    Средняя оценка:
+                    {% if book.average_rating is not none %}
+                        {{ "%.1f"|format(book.average_rating) }}
+                    {% else %}
+                        нет
+                    {% endif %}
+                    · Рецензий: {{ book.reviews|length }}
+                </p>
+            </div>
+            <div class="row-actions">
+                <a class="icon-button" title="Просмотр" href="{{ url_for('books.show', book_id=book.id) }}">👁</a>
+                {% if can_edit_book() %}
+                    <a class="icon-button" title="Редактировать" href="{{ url_for('books.edit', book_id=book.id) }}">✎</a>
+                {% endif %}
+                {% if can_delete_book() %}
+                    <button class="icon-button danger" title="Удалить" data-delete-url="{{ url_for('books.delete', book_id=book.id) }}" data-book-title="{{ book.title }}">×</button>
+                {% endif %}
+            </div>
+        </article>
+    {% else %}
+        <p class="empty">Книги пока не добавлены.</p>
+    {% endfor %}
+</div>
+
+{% if books.pages > 1 %}
+    <div class="pagination">
+        {% if books.has_prev %}
+            <a href="{{ url_for('books.index', page=books.prev_num) }}">Назад</a>
+        {% endif %}
+        <span>Страница {{ books.page }} из {{ books.pages }}</span>
+        {% if books.has_next %}
+            <a href="{{ url_for('books.index', page=books.next_num) }}">Вперёд</a>
+        {% endif %}
+    </div>
+{% endif %}
+
+<dialog id="delete-dialog">
+    <form method="post">
+        <h2>Удаление книги</h2>
+        <p id="delete-message"></p>
+        <div class="dialog-actions">
+            <button class="button danger" type="submit">Да</button>
+            <button class="button secondary" type="button" data-close-dialog>Нет</button>
+        </div>
+    </form>
+</dialog>
+{% endblock %}
+

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}{{ "Редактирование книги" if book else "Добавление книги" }}{% endblock %}
+
+{% block content %}
+<section class="form-page wide">
+    <h1>{{ "Редактирование книги" if book else "Добавление книги" }}</h1>
+    <form class="form" method="post" enctype="multipart/form-data">
+        <label>
+            <span>Название</span>
+            <input name="title" required value="{{ request.form.get('title', book.title if book else '') }}">
+        </label>
+        <label>
+            <span>Краткое описание</span>
+            <textarea id="description" name="short_description" placeholder="Можно использовать Markdown">{{ request.form.get('short_description', book.short_description if book else '') }}</textarea>
+        </label>
+        <div class="grid-two">
+            <label>
+                <span>Год</span>
+                <input name="year" type="number" min="1" max="9999" required value="{{ request.form.get('year', book.year if book else '') }}">
+            </label>
+            <label>
+                <span>Объём, стр.</span>
+                <input name="pages" type="number" min="1" required value="{{ request.form.get('pages', book.pages if book else '') }}">
+            </label>
+        </div>
+        <label>
+            <span>Издательство</span>
+            <input name="publisher" required value="{{ request.form.get('publisher', book.publisher if book else '') }}">
+        </label>
+        <label>
+            <span>Автор</span>
+            <input name="author" required value="{{ request.form.get('author', book.author if book else '') }}">
+        </label>
+        <label>
+            <span>Жанры</span>
+            <select name="genres" multiple required>
+                {% set selected_ids = request.form.getlist('genres') or (book.genres|map(attribute='id')|map('string')|list if book else []) %}
+                {% for genre in genres %}
+                    <option value="{{ genre.id }}" {% if genre.id|string in selected_ids %}selected{% endif %}>{{ genre.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        {% if not book %}
+            <label>
+                <span>Обложка</span>
+                <input name="cover" type="file" accept="image/*" required>
+            </label>
+        {% endif %}
+        <div class="form-actions">
+            <button class="button" type="submit">Сохранить</button>
+            <a class="button secondary" href="{{ url_for('books.index') }}">Отмена</a>
+        </div>
+    </form>
+</section>
+{% endblock %}
