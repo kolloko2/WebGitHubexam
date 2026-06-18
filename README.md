@@ -23,16 +23,3 @@ flask --app app run --debug --port 5051
 
 Автор: группа 241-372, Кодзаев Николай Петрович.
 
-## Подготовка БД
-
-```bash
-mysql -u std_NNNN_exam -h std-mysql -p std_NNNN_exam < database-schema.sql
-mysql -u std_NNNN_exam -h std-mysql -p std_NNNN_exam < seed.sql
-```
-
-Перед сдачей нужно сделать дампы:
-
-```bash
-mysqldump --no-data --column-statistics=0 -u std_NNNN_exam -h std-mysql -p std_NNNN_exam > database-schema.sql
-mysqldump --column-statistics=0 -u std_NNNN_exam -h std-mysql -p std_NNNN_exam > database.sql
-```
